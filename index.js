@@ -29,7 +29,28 @@ const cities = {};
 
     console.dir(cities);
 
-    await fs.writeFile('assets/data.json', JSON.stringify({ '台灣': cities }, null, 2));
+    // v1
+    await fs.writeFile('assets/output_v1.json', JSON.stringify({ '台灣': cities }, null, 2));
+
+    const countries = [
+      {
+        name: '台灣',
+        cities: Object.entries(cities).map(([key, districts]) => {
+          return {
+            name: key,
+            districts: Object.entries(districts).map(([key, value]) => {
+              return {
+                name: key,
+                ...value,
+              };
+            }),
+          };
+        }),
+      },
+    ];
+
+    // v2
+    await fs.writeFile('assets/output_v2.json', JSON.stringify({ countries }, null, 2));
   } catch (err) {
     console.error(err);
   }
